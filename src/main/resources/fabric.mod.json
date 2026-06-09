@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "thesilveragepatch",
+	"version": "${version}",
+	"name": "TheSilverAgePatch",
+	"description": "A Polymer Patch mod for The Silver Age, allowing it to work fully server side!",
+	"authors": [
+		"Sun_Phoen1x"
+	],
+  "contact": {
+    "discord": "https://discord.gg/czfFedprM4",
+    "source": "https://github.com/SunPhoen1x/The-Silver-Age-Patch",
+    "modrinth": "https://modrinth.com/mod/the-silver-age-polymer"
+  },
+	"license": "MIT",
+	"icon": "assets/thesilveragepatch/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "com.phoen1x.thesilveragepatch.impl.TheSilverAgePatch"
+		]
+	},
+	"mixins": [
+		"thesilveragepatch.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.0",
+		"minecraft": "~1.21.8",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

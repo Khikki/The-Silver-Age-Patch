@@ -1,0 +1,18 @@
+{
+	"required": true,
+	"package": "com.phoen1x.thesilveragepatch.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ModBlockEntityTypesMixin",
+        "ModBlocksMixin",
+        "ModCreativeModeTabMixin",
+        "ModItemsMixin",
+        "MoonDialItemMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}
