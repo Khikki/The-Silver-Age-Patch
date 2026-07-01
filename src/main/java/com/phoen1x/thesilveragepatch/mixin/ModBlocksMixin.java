@@ -12,10 +12,12 @@ import eu.pb4.polymer.common.api.PolymerCommonUtils;
 import eu.pb4.polymer.core.api.block.PolymerBlock;
 import eu.pb4.polymer.virtualentity.api.BlockWithElementHolder;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.minecraft.block.*;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.core.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -27,7 +29,7 @@ import java.util.function.Supplier;
 @Mixin(ModBlocks.class)
 public class ModBlocksMixin {
     @Redirect(
-            method = "registerSilverBlock(Ljava/lang/String;Lnet/minecraft/block/AbstractBlock$Settings;Ljava/util/function/Function;)Ldev/architectury/registry/registries/RegistrySupplier;",
+            method = "registerSilverBlock(Ljava/lang/String;Lnet/minecraft/world/level/block/state/BlockBehaviour$Properties;Ljava/util/function/Function;)Ldev/architectury/registry/registries/RegistrySupplier;",
             at = @At(
                     value = "INVOKE",
                     target = "Ldev/architectury/registry/registries/DeferredRegister;register(Ljava/lang/String;Ljava/util/function/Supplier;)Ldev/architectury/registry/registries/RegistrySupplier;"
@@ -37,24 +39,24 @@ public class ModBlocksMixin {
     private static RegistrySupplier<Block> polymerifyBlocks(DeferredRegister<Block> instance, String name, Supplier<Block> supplier) {
         return instance.register(name, () -> {
             Block block = supplier.get();
-            TheSilverAgePatch.LATE_INIT.add(() -> BlockStateModelManager.addBlock(Registries.BLOCK.getId(block), block));
+            TheSilverAgePatch.LATE_INIT.add(() -> BlockStateModelManager.addBlock(BuiltInRegistries.BLOCK.getKey(block), block));
             PolymerBlock overlay = null;
-            Identifier location = Identifier.of("thesilverage", name);
+            Identifier location = Identifier.fromNamespaceAndPath("thesilverage", name);
 
             if (block instanceof DoorBlock) {
                 overlay = DoorPolymerBlock.INSTANCE;
-            } else if (block instanceof TrapdoorBlock) {
+            } else if (block instanceof TrapDoorBlock) {
                 overlay = TrapdoorPolymerBlock.INSTANCE;
             } else if (block instanceof SlabBlock) {
                 overlay = (PolymerBlock) (Object) SlabPolymerBlock.of(block, location);
-            } else if (block instanceof StairsBlock) {
+            } else if (block instanceof StairBlock) {
                 overlay = StateCopyFactoryBlock.STAIR;
             } else if (block instanceof MoonPhaseDetectorBlock) {
                 overlay = BaseFactoryBlock.TRIPWIRE;
             }
 
             if (overlay == null) {
-                if (block.getDefaultState().getCollisionShape(PolymerCommonUtils.getFakeWorld(), BlockPos.ORIGIN).isEmpty()) {
+                if (block.defaultBlockState().getCollisionShape(PolymerCommonUtils.getFakeWorld(), BlockPos.ZERO).isEmpty()) {
                     overlay = BaseFactoryBlock.SAPLING;
                 } else {
                     overlay = BaseFactoryBlock.BARRIER;

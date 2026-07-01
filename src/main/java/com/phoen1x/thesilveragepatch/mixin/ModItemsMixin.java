@@ -6,7 +6,7 @@ import com.phoen1x.thesilveragepatch.impl.item.PolyBaseItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import eu.pb4.polymer.core.api.item.PolymerItem;
-import net.minecraft.item.Item;
+import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -19,7 +19,7 @@ public class ModItemsMixin {
             method = {
                     "registerKnife",
                     "registerWithModCompat",
-                    "register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/item/Item$Settings;)Ldev/architectury/registry/registries/RegistrySupplier;"
+                    "register(Ljava/lang/String;Ljava/util/function/Function;Lnet/minecraft/world/item/Item$Properties;)Ldev/architectury/registry/registries/RegistrySupplier;"
             },
             at = @At(value = "INVOKE",
                     target = "Ldev/architectury/registry/registries/DeferredRegister;register(Ljava/lang/String;Ljava/util/function/Supplier;)Ldev/architectury/registry/registries/RegistrySupplier;"
